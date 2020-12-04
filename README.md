@@ -114,6 +114,15 @@ AdaScale can be used to wrap a SGD optimizer and to be used in DDP (Distributed 
 training or non-DDP with gradient accumulation. The benefit is to re-use the same LR
 schedule from a baseline batch size when effective batch size is bigger.
 
+```python
+from torch.optim import SGD
+from fairscale.optim import AdaScale
+
+...
+optim = AdaScale(SGD(model.parameters(), lr=0.1))
+...
+```
+
 Primary goal is to allow scaling to bigger batch sizes without losing model accuracy.
 
 At a high level, we want ML researchers to:

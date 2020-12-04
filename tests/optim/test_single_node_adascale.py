@@ -94,6 +94,9 @@ def test_grad_accum_gpu():
 def test_state_checkpointing():
     """ Test state checkpointing on GPU since that's the common case.
 
+        Note, we don't support checkpointing in the middle of gradient accumulation
+        step. Therefore, it is not tested here.
+
         AdaScale doesn't have distributed state. Otherwise, it will need
         a unit test for checkpointing with DDP.
     """

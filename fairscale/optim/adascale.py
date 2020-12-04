@@ -252,6 +252,8 @@ class AdaScale(object):
         assert isinstance(self._local_grad_sqr, torch.Tensor)
 
         # Keep track of number of backward calls for gradient accumulation.
+        # TODO (min): this may not work with activation checkpointing when
+        #             multiple backward calls happen in a big backward.
         self._num_backward_calls += 1
 
         # TODO (min, mike): We need to have a way to check that training loop & DDP
@@ -334,9 +336,16 @@ class AdaScale(object):
         return self._optimizer.zero_grad()
 
     def state_dict(self) -> Dict:
-        """Proxy function to optimizer, checkpointing needs this."""
+        """ Proxy function to optimizer, checkpointing needs this.
+
+            Note: Do NOT checkpoint in the middle of gradient accumulation since
+                  associated AdaScale internal states are not saved in the checkpoint.
+        """
         return self._optimizer.state_dict()
 
     def load_state_dict(self, data: Dict) -> None:
-        """Proxy function to optimizer, checkpointing needs this."""
+        """ Proxy function to optimizer, checkpointing needs this.
+
+            See notes in the comment of `state_dict()`
+        """
         return self._optimizer.load_state_dict(data)
