@@ -54,11 +54,14 @@ class AdaScale(object):
         model = DistributedDataParallel(model)
         adascale = AdaScale(optim)
 
+        step = 0
         for epoch in ...:
             for batch in ...:
                 optim.zero_grad()
                 loss = ...
                 loss.backward()
+                step += adascale.gain()
+                update_lr(step)
                 adascale.step()
 
     Args:
