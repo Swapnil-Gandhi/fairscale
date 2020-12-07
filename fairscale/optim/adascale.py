@@ -71,9 +71,10 @@ class AdaScale(object):
             Number of world_size for distributed training. If
             None, defaults to ``dist.get_world_size()``.
         scale (float):
-            Scaling factor of the batch size, e.g. using a 10x
-            larger batch size (summed across all world_size) means a scale of
-            10. If None, defaults to ``world_size``.
+            Scaling factor of the batch size from scale equals 1, e.g. using a 10x
+            larger batch size (summed across all ranks with gradient accumulation)
+            means a scale of 10. If None, defaults to
+            ``world_size * num_gradients_to_accumulate``.
         smoothing (float):
             Smoothing factor between batches. Default value: 0.9999
         num_gradients_to_accumulate (int):
